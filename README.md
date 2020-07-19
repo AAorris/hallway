@@ -2,7 +2,7 @@
 
 ## Add your feed
 
-Update [feeds.js](https://vercel.com/import/project?template=https://github.com/AAorris/hallway/tree/main/feeds.js)
+Update [feeds.js](https://github.com/AAorris/hallway/tree/main/feeds.js)
 
 ## Customize it
 
