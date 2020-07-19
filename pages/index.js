@@ -33,7 +33,7 @@ const Hallway = ({ items }) => (
 async function getFeed(url) {
   const resp = await fetch(url)
   const text = await resp.text()
-  const lines = text.trim().split('\n')
+  const lines = text.trim().split('\n').filter(l => l[0] !== '#')
   const pairs = lines.map(line => line.split('\t'))
   let x = 0
   const items = pairs.map(([ts, txt]) => {
