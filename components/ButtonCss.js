@@ -20,7 +20,7 @@ import tw from '@tailwindcssinjs/macro'
 const styles = {
   button: css(tw`
     relative
-    w-64 min-w-full
+    min-w-full
     flex justify-center
     py-2 px-4
     border border-transparent
