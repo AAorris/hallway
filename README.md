@@ -1,6 +1,10 @@
 # Aaron's Hallway
 
-## Hack on it
+## Add your feed
+
+Update [feeds.js](https://vercel.com/import/project?template=https://github.com/AAorris/hallway/tree/main/feeds.js)
+
+## Customize it
 
 Clone the repository, then run `yarn && yarn dev`
 

@@ -1,9 +1,6 @@
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
-// import ButtonCss from 'components/ButtonCss'
-// import ButtonReact from 'components/ButtonReact'
-// import ButtonStyled from 'components/ButtonStyled'
 
 const SelectedNavItem = styled.a(tw`
   pb-4 pt-5 ml-3
@@ -50,11 +47,7 @@ async function getFeed(url) {
 }
 
 export async function getStaticProps() {
-  const urls = [
-    'https://feed.amorris.ca/hallway.txt',
-    'https://t.seed.hex22.org/twtxt.txt',
-    'https://wiki.xxiivv.com/twtxt.txt',
-  ]
+  const urls = require('../feeds').urls
   const results = await Promise.all(urls.map(getFeed))
   const items = results
     .reduce((acc, val) => acc.concat(val), [])
