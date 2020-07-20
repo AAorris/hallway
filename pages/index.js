@@ -23,7 +23,11 @@ const Hallway = ({ items }) => (
 
 async function getFeed(feed) {
   const {signal, abort} = new AbortController()
-  setTimeout(abort, 3000)
+  setTimeout(() => {
+    try {
+      abort()
+    } catch (e) {}
+  }, 3000)
   const resp = await fetch(feed.url, {
     signal,
     size: 1000 * 1000, // 1000kb in bytes

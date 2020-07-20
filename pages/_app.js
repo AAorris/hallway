@@ -37,6 +37,7 @@ export default function MyApp({ Component, pageProps }) {
       <nav className={css(tw`pl-3 flex flex-row border-solid border-0 border-b border-gray-700`)}>
         <NavItem pathname="/" name="Hallway" />
         <NavItem pathname="/feeds" name="Feeds" />
+        <NavItem pathname="/about" name="About" />
       </nav>
       <Component {...pageProps} />
     </>
