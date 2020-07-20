@@ -43,8 +43,11 @@ const Feeds = ({ items }) => {
         </section>}
         <Form method="POST" action="/api/domain" style={{maxWidth: '65ch'}}>
           <FormTitle>Register a Feed</FormTitle>
-          <p className={css(tw`text-gray-500`)}>House rules: Please use UTC timestamps (2020-07-20T00:43:50Z) and tabs (\t),
-            have less than 500kb of text, and respond in &lt;3s. Aggregation features are exclusive to merveilles.town. DM @amorris@merveilles.town with any questions.</p>
+          <p className={css(tw`text-gray-500`)}>
+            House rules: Please have less than 500kb of text, and respond in &lt;3s.
+            Aggregation features are exclusive to merveilles.town.
+            DM @amorris@merveilles.town with any questions.
+          </p>
           <section className={css(tw`md:flex`)}>
             <FormInput type="text" name="feed" placeholder="https://alice.com/tw.txt" />
             <FormInput type="text" name="feedname" placeholder="alice.com" />
