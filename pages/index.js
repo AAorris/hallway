@@ -2,6 +2,7 @@ import 'core-js/modules/es.promise.all-settled'
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
+import AbortController from 'abort-controller'
 
 const Post = styled.div(tw`px-3`)
 
@@ -21,7 +22,15 @@ const Hallway = ({ items }) => (
 )
 
 async function getFeed(feed) {
-  const resp = await fetch(feed.url)
+  const {signal, abort} = new AbortController()
+  setTimeout(abort, 3000)
+  const resp = await fetch(feed.url, {
+    signal,
+    size: 1000 * 1000, // 1000kb in bytes
+    headers: {
+      'Cache-Control': 's-maxage=3600, stale-while-revalidate'
+    }
+  })
   const text = await resp.text()
   const lines = text.trim().split('\n').filter(l => l[0] !== '#')
   const pairs = lines.map(line => line.split('\t'))
@@ -38,7 +47,10 @@ async function getFeed(feed) {
 
 async function aggregateFeeds() {
   const feeds = await require('../feeds').getAllFeeds()
-  const results = await Promise.allSettled(feeds.map(feed => getFeed(feed)))
+  console.log(feeds)
+  const results = await Promise.allSettled(
+    feeds.filter(feed => feed.trusted === 'trusted').map(feed => getFeed(feed))
+  )
   return results
     .filter(r => r.status === "fulfilled")
     .map(r => r.value)
@@ -48,10 +60,6 @@ async function aggregateFeeds() {
 
 export async function getStaticProps() {
   const items = await aggregateFeeds()
-  // const items = [
-  //   [123, 'hi', 'aaron']
-  // ]
-  // console.log(items)
   return { props: { items }, unstable_revalidate: 5 }
 }
 

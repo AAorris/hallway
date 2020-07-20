@@ -42,7 +42,9 @@ const Feeds = ({ items }) => {
           <p>Submitted {feed}! Please wait for it to appear.</p>
         </section>}
         <Form method="POST" action="/api/domain" style={{maxWidth: '65ch'}}>
-          <FormTitle>Submit a Feed</FormTitle>
+          <FormTitle>Register a Feed</FormTitle>
+          <p className={css(tw`text-gray-500`)}>House rules: Please use UTC timestamps (2020-07-20T00:43:50Z) and tabs (\t),
+            have less than 500kb of text, and respond in &lt;3s. Aggregation features are exclusive to merveilles.town. DM @amorris@merveilles.town with any questions.</p>
           <section className={css(tw`md:flex`)}>
             <FormInput type="text" name="feed" placeholder="https://alice.com/tw.txt" />
             <FormInput type="text" name="feedname" placeholder="alice.com" />
@@ -50,9 +52,9 @@ const Feeds = ({ items }) => {
           <FormSubmit type="submit" />
         </Form>
         <Prose>
-          {items.map(({url, name}) => {
+          {items.map(({url, name, trusted}) => {
             return <Post key={url}>
-              <p><LightSpan>{name}</LightSpan><br />{url}</p>
+              <p>{trusted && '✅' || '🟣'} <LightSpan>{name}</LightSpan><br /><a href={url} style={{color: '#888'}}>{url}</a></p>
             </Post>
           })}
         </Prose>
