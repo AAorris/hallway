@@ -27,7 +27,6 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script dangerouslySetInnerHTML={{ __html: 'document.body.style.display = "block"; document.body.style.margin = 0' }}></script>
         </body>
       </Html>
     )

@@ -1,37 +1,36 @@
+import 'core-js/modules/es.promise.all-settled'
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
+import AbortController from 'abort-controller'
 
-const SelectedNavItem = styled.a(tw`
-  pb-4 pt-5 ml-3
-  border-solid border-0 border-b-2 border-white
-`)
-
-const NavItem = styled.a(tw`
-  pb-4 pt-5 ml-3 text-gray-500
-`)
-
-const Post = styled.div(tw`
-  px-3
-`)
+const Post = styled.div(tw`px-3`)
 
 const Hallway = ({ items }) => (
-  <main className={css(tw`bg-black text-white`)}>
-    <nav className={css(tw`pl-3 flex flex-row border-solid border-0 border-b border-gray-700`)}>
-      <SelectedNavItem>Hallway</SelectedNavItem>
-    </nav>
+  <main className={css(tw`bg-black text-white`)}> 
     <section className={css(tw`p-6 prose`)}>
       {items.map(([ts, txt, src]) => {
         return <Post key={ts} style={{border: '1px solid #333'}}>
-          <p>{src} - {ts}<br /><span className={css(tw`text-gray-300`)}>{txt}</span></p>
+          <p>
+            {src} - 
+            &nbsp;<a id={ts} href={`#${ts}`} style={{color: '#888'}}>{ts}</a>
+            <br /><span className={css(tw`text-gray-300`)}>{txt}</span></p>
         </Post>
       })}
     </section>
   </main>
 )
 
-async function getFeed(url) {
-  const resp = await fetch(url)
+async function getFeed(feed) {
+  const {signal, abort} = new AbortController()
+  setTimeout(abort, 3000)
+  const resp = await fetch(feed.url, {
+    signal,
+    size: 1000 * 1000, // 1000kb in bytes
+    headers: {
+      'Cache-Control': 's-maxage=3600, stale-while-revalidate'
+    }
+  })
   const text = await resp.text()
   const lines = text.trim().split('\n').filter(l => l[0] !== '#')
   const pairs = lines.map(line => line.split('\t'))
@@ -40,19 +39,27 @@ async function getFeed(url) {
     const dt = new Date(ts)
     if (!dt || !txt) return null
     try {
-      return [dt.getTime(), txt, url]
+      return [dt.getTime(), txt, feed.name || feed.url]
     } catch (e) { return null }
   }).filter(x => x)
   return items
 }
 
-export async function getStaticProps() {
-  const urls = require('../feeds').urls
-  const results = await Promise.all(urls.map(getFeed))
-  const items = results
+async function aggregateFeeds() {
+  const feeds = await require('../feeds').getAllFeeds()
+  console.log(feeds)
+  const results = await Promise.allSettled(
+    feeds.filter(feed => feed.trusted === 'trusted').map(feed => getFeed(feed))
+  )
+  return results
+    .filter(r => r.status === "fulfilled")
+    .map(r => r.value)
     .reduce((acc, val) => acc.concat(val), [])
     .sort((a, b) => b[0] - a[0])
-  // console.log(items)
+}
+
+export async function getStaticProps() {
+  const items = await aggregateFeeds()
   return { props: { items }, unstable_revalidate: 5 }
 }
 
