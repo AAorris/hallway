@@ -1,3 +1,7 @@
+import Airtable from 'airtable'
+
+const base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appWRLvYBrNmW9ClQ');
+
 export const urls = [
     "https://feed.amorris.ca/hallway.txt",
     "https://t.seed.hex22.org/twtxt.txt",
@@ -10,14 +14,24 @@ export const urls = [
 
 const KB = 1000
 
-export const getAllFeeds = async () => {
-    const sheet = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS-FzjyiOz0gP21K6zU_3gqbopbaQLF1g2yf-vp_8rEUb6kGiHUuOHcHuJMTdckg5VI0H7eboHaHpQe/pub?gid=0&single=true&output=csv"
-    const resp = await fetch(sheet)
-    const text = await resp.text()
-    return text
-        .split('\n')
-        .map(x => x.trim())
-        .filter(x => x.startsWith('https://'))
-        .map(x => x.split(','))
-        .map(([url, name, trusted]) => ({url, name, trusted}))
+export const getAllFeeds = () => {
+    return new Promise((resolve, reject) => {
+        const feeds = []
+        base('Feeds').select({
+            maxRecords: 100,
+            view: "Grid view"
+        }).eachPage(function page(records, fetchNextPage) {
+            records.forEach(function(record) {
+                feeds.push({
+                    url: record.get('url') || '',
+                    name: record.get('name') || '',
+                    trusted: record.get('trusted') || '',
+                })
+            });
+            fetchNextPage();
+        }, function done(err) {
+            if (err) { console.error(err); return; }
+            resolve(feeds)
+        });
+    })
 }
