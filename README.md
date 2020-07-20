@@ -2,7 +2,7 @@
 
 ## Add your feed
 
-Update [feeds.js](https://github.com/AAorris/hallway/tree/main/feeds.js)
+[Submit here](https://hallway.amorris.vercel.app/feeds) and you'll be registered. Verified (if I know you) users of merveilles.town will be aggregated in the hallway feed. Others will have a link on the feeds page.
 
 ## Customize it
 
