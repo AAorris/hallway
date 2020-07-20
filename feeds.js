@@ -5,6 +5,7 @@ export const urls = [
     "https://www.gkbrk.com/twtxt.txt",
     "https://phse.net/twtxt/merv.txt",
     "https://avanier.now.sh/tw.txt",
+    "http://ctrl-c.club/~jlj/tw.txt",
 ]
 
 const KB = 1000
