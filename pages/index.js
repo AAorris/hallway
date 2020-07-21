@@ -4,67 +4,28 @@ import styled from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 import AbortController from 'abort-controller'
 
-const Post = styled.div(tw`px-3`)
+const Post = styled.div(tw`flex mb-6`)
 
-const Hallway = ({ items }) => (
-  <main className={css(tw`bg-black text-white`)}> 
-    <section className={css(tw`p-6 prose`)}>
-      {items.map(([ts, txt, src]) => {
-        return <Post key={ts} style={{border: '1px solid #333'}}>
-          <p>
-            {src} - 
-            &nbsp;<a id={ts} href={`#${ts}`} style={{color: '#888'}}>{ts}</a>
-            <br /><span className={css(tw`text-gray-300`)}>{txt}</span></p>
-        </Post>
-      })}
+const Index = ({ items }) => (
+  <main className={css(tw`bg-white text-black`)}> 
+    <section className={css(tw`absolute flex justify-center top-6 items-center w-screen h-screen pointer-events-none`)}>
+      <div>
+      <svg class="vector" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg" baseProfile="full" version="1.1" style={{fill:'none',stroke:'black',strokeWidth:5,strokeLinecap:'square'}}>
+        <g transform="translate(0,30)">
+          <g transform="translate(150,150),rotate(120,0,0)">
+            <path d="M0,-60 a60,60 0 1,0 0,120 l100,0"></path>   
+          </g>
+          <g transform="translate(150,150),rotate(240,0,0)">
+            <path d="M0,-60 a60,60 0 1,0 0,120 l100,0"></path>   
+          </g>
+          <g transform="translate(150,150),rotate(0,0,0)">
+            <path d="M0,-60 a60,60 0 1,0 0,120 l100,0"></path>   
+          </g>
+        </g>
+      </svg>
+      </div>
     </section>
   </main>
 )
 
-async function getFeed(feed) {
-  const {signal, abort} = new AbortController()
-  setTimeout(() => {
-    try {
-      abort()
-    } catch (e) {}
-  }, 3000)
-  const resp = await fetch(feed.url, {
-    signal,
-    size: 1000 * 1000, // 1000kb in bytes
-    headers: {
-      'Cache-Control': 's-maxage=3600, stale-while-revalidate'
-    }
-  })
-  const text = await resp.text()
-  const lines = text.trim().split('\n').filter(l => l[0] !== '#')
-  const pairs = lines.map(line => line.split('\t'))
-  let x = 0
-  const items = pairs.map(([ts, txt]) => {
-    const dt = new Date(ts)
-    if (!dt || !txt) return null
-    try {
-      return [dt.getTime(), txt, feed.name || feed.url]
-    } catch (e) { return null }
-  }).filter(x => x)
-  return items
-}
-
-async function aggregateFeeds() {
-  const feeds = await require('../feeds').getAllFeeds()
-  console.log(feeds)
-  const results = await Promise.allSettled(
-    feeds.filter(feed => feed.trusted === 'trusted').map(feed => getFeed(feed))
-  )
-  return results
-    .filter(r => r.status === "fulfilled")
-    .map(r => r.value)
-    .reduce((acc, val) => acc.concat(val), [])
-    .sort((a, b) => b[0] - a[0])
-}
-
-export async function getStaticProps() {
-  const items = await aggregateFeeds()
-  return { props: { items }, unstable_revalidate: 5 }
-}
-
-export default Hallway
+export default Index

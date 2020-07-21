@@ -8,9 +8,9 @@ import styled from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 
 const SelectedNavItem = styled.div(tw`
-  text-white
+  text-black
   pb-4 pt-5 ml-3
-  border-solid border-0 border-b-2 border-white
+  border-solid border-0 border-b-2 border-black
 `)
 
 const UnselectedNavItem = styled.div(tw`
@@ -34,10 +34,10 @@ export default function MyApp({ Component, pageProps }) {
       <Head>
         <title>Hallway</title>
       </Head>
-      <nav className={css(tw`pl-3 flex flex-row border-solid border-0 border-b border-gray-700`)}>
-        <NavItem pathname="/" name="Hallway" />
+      <nav className={css(tw`pl-3 flex flex-row border-solid border-0 border-b border-gray-200`)}>
+        <NavItem pathname="/" name="Home" />
         <NavItem pathname="/feeds" name="Feeds" />
-        <NavItem pathname="/about" name="About" />
+        <NavItem pathname="/hallway" name="Hallway" />
       </nav>
       <Component {...pageProps} />
     </>

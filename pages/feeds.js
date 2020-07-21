@@ -6,20 +6,20 @@ import { getAllFeeds } from 'feeds'
 import { useEffect, useState } from 'react'
 
 /* styles */
-const Post = styled.div(tw`px-3 my-3 border border-gray-600`)
+const Post = styled.div(tw`px-3 my-3 border border-gray-200`)
 const Prose = styled.div(tw`prose`)
-const LightSpan = styled.span(tw`text-gray-300`)
-const Form = styled.form(tw`flex flex-col rounded border border-gray-600 p-3 my-3`)
-const FormTitle = styled.h2(tw`text-gray-200`)
-const baseInput = `rounded bg-gray-900 p-1 placeholder-gray-500`
+const LightSpan = styled.span(tw`text-gray-600`)
+const Form = styled.form(tw`flex flex-col rounded border border-gray-200 p-3 my-3`)
+const FormTitle = styled.h2(tw`text-gray-800 pb-3`)
+const baseInput = `rounded bg-gray-100 p-1 placeholder-gray-500`
 const FormInputInner = styled.input(tw`${baseInput} w-full block`)
-const FormInputOuter = styled.div(tw`my-3 mx-1 w-full`)
+const FormInputOuter = styled.div(tw`my-3 mr-3 w-full`)
 const FormInput = (props) => <FormInputOuter>
   <label className={css(tw`text-sm mb-3 text-gray-400 block`)} htmlFor={props.name}>{props.name.toUpperCase()}</label>
   <FormInputInner id={props.name} {...props} />
 </FormInputOuter>
 const FormSubmit = styled.input(tw`
-  py-2 mx-1 my-3 rounded text-gray-600 cursor-pointer
+  py-2 my-3 rounded text-gray-600 cursor-pointer
   bg-gray-100 hover:bg-gray-200
   transition-colors duration-200 ease-in-out
   w-12
@@ -36,14 +36,14 @@ const Feeds = ({ items }) => {
     }
   })
   return (
-    <main className={css(tw`bg-black text-white lg:flex`)}>
+    <main className={css(tw`bg-white text-black lg:flex`)}>
       <section className={css(tw`p-6 flex-grow`)}>
-        {feed && <section style={{maxWidth: '65ch'}} className={css(tw`rounded p-6 flex-grow bg-green-500 text-white`)}>
+        {feed && <section style={{maxWidth: '65ch'}} className={css(tw`rounded p-6 flex-grow bg-green-500 text-black`)}>
           <p>Submitted {feed}! Please wait for it to appear.</p>
         </section>}
         <Form method="POST" action="/api/domain" style={{maxWidth: '65ch'}}>
           <FormTitle>Register a Feed</FormTitle>
-          <p className={css(tw`text-gray-500`)}>
+          <p className={css(tw`text-gray-400`)}>
             House rules: Please have less than 500kb of text, and respond in &lt;3s.
             Aggregation features are exclusive to merveilles.town.
             DM @amorris@merveilles.town with any questions.
