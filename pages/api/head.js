@@ -60,7 +60,8 @@ export default async function getHead(req, res) {
   try {
     const data = await aggregateFeeds(Math.min(500, req.query.n || 10))
     res.writeHead(200, 'OK', {
-      'Content-Type': 'text/plain; charset=utf-8'
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'max-age=3, s-maxage=1, stale-while-revalidate',
     })
     res.end(data.join('\n'))
   } catch(e) {
